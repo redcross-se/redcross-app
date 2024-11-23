@@ -13,20 +13,18 @@ const DetailsRow = ({ label, value }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderColor: '#EEE',
+    paddingHorizontal: 15,
   },
   label: {
-    fontSize: 16,
-    color: '#333',
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 5,
   },
   value: {
     fontSize: 16,
-    color: '#666',
-    fontWeight: '600',
+    color: '#000',
+    fontWeight: 'bold',
   },
 });
 

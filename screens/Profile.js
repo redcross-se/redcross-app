@@ -3,6 +3,8 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import HeaderComponent from '../components/EmergencyCall/Header';
 import ProfileInfoComponent from '../components/UserProfile/ProfileInfo';
 import DetailsGridComponent from '../components/UserProfile/DetailsGrid';
+import AllergiesList from '../components/UserProfile/AllergyList';
+import EmergencyContacts from '../components/UserProfile/EmergencyContact';
 
 const Profile = () => {
   const userDetails = [
@@ -17,6 +19,8 @@ const Profile = () => {
       <HeaderComponent />
       <ProfileInfoComponent name="John Doe" dateOfBirth="16 November 1994" />
       <DetailsGridComponent details={userDetails} />
+      <AllergiesList />
+      <EmergencyContacts />
     </ScrollView>
   );
 };
