@@ -10,12 +10,11 @@ const Login = ({ navigation }) => {
       console.log("User logged in:", user);
       // Store the token and navigate to another screen
       console.log("Token:", token);
-      AsyncStorage.setItem("token", token);
-
+      await AsyncStorage.setItem("token", token);
+      await AsyncStorage.setItem("user", JSON.stringify(user));
       navigation.navigate("Home");
     } catch (error) {
-      console.error("Login Error:", error.message);
-      // Show error message to the user
+      Alert.alert("Error", error.message);
     }
   };
 
@@ -25,7 +24,7 @@ const Login = ({ navigation }) => {
       onSubmit={handleLogin}
       navigation={navigation}
     />
-  ); // Pass navigation prop
+  );
 };
 
 export default Login;

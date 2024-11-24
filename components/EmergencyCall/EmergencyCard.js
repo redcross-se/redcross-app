@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,8 +7,47 @@ import {
   Image,
   ImageBackground,
 } from "react-native";
+import io from "socket.io-client";
+import { getAddressFromCoordinates } from "../../services/locationService";
+import * as Location from "expo-location";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const EmergencyCard = () => {
+const EmergencyCard = ({ navigation }) => {
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const newSocket = io("http://192.168.0.114:3000");
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
+
+  const handleLongPress = async () => {
+    console.log("Long press detected");
+    try {
+      const location = await Location.getCurrentPositionAsync({});
+      const user = await AsyncStorage.getItem("user");
+      const userData = JSON.parse(user);
+      const { latitude, longitude } = location.coords;
+      const address = await getAddressFromCoordinates(latitude, longitude);
+
+      socket.emit("initiateEmergency", {
+        userId: userData.id,
+        location: { latitude, longitude, address },
+        status: "pending",
+      });
+
+      socket.on("newEmergency", (emergency) => {
+        console.log("Emergency initiated:", emergency);
+        navigation.navigate("EmergencyInfo", { emergencyId: emergency.id });
+      });
+    } catch (error) {
+      console.error("Error initiating emergency:", error);
+    }
+  };
+
   return (
     <View style={styles.card}>
       <Text style={styles.cardTitle}>Emergency?</Text>
@@ -16,16 +55,17 @@ const EmergencyCard = () => {
         Hold the SOS button to connect with a responder.
       </Text>
       <View style={styles.sosButtonWrapper}>
-        {/* Background layer */}
         <View style={styles.sosBackgroundLayer}>
           <ImageBackground
             source={require("../../assets/EmergencyEllipse.svg")}
             style={styles.sosButtonBackground}
           >
-            <TouchableOpacity style={styles.sosButton}>
-              {/* SOS Icon */}
+            <TouchableOpacity
+              style={styles.sosButton}
+              onLongPress={handleLongPress}
+            >
               <Image
-                source={require("../../assets/EmergencyButtonIcon.png")} // Replace this path with your icon path
+                source={require("../../assets/EmergencyButtonIcon.png")}
                 style={styles.iconPlaceholder}
               />
               <Text style={styles.sosText}>Hold for</Text>
