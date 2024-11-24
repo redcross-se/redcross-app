@@ -1,6 +1,12 @@
-import React from 'react';
-import { View, Text, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React from "react";
+import {
+  View,
+  Text,
+  ImageBackground,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const OnBoarding = () => {
   const navigation = useNavigation(); // Get navigation object
@@ -9,22 +15,24 @@ const OnBoarding = () => {
     <View style={styles.container}>
       <View style={styles.topView}>
         <ImageBackground
-          source={require('../assets/image3.png')}
+          source={require("../assets/image3.png")}
           style={styles.background}
           imageStyle={styles.imageStyle}
-        >
-          {/* Leave ImageBackground without the text */}
-        </ImageBackground>
-        <Text style={styles.title}>Together For Humanity</Text> {/* Place text below the cross */}
+        ></ImageBackground>
+        <Text style={styles.title}>Together For Humanity</Text>
       </View>
       <View style={styles.bottomView}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('Profile')} // Navigate to CallAction screen
+          onPress={() => navigation.navigate("SignUp")}
         >
           <Text style={styles.buttonText}>Get started</Text>
         </TouchableOpacity>
       </View>
+      <ImageBackground
+        source={require("../assets/DarkRedGradient.png")}
+        style={styles.gradientBackground}
+      ></ImageBackground>
     </View>
   );
 };
@@ -35,38 +43,50 @@ const styles = StyleSheet.create({
   },
   topView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
   },
   background: {
     flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: 48,
-    color: 'white',
-    textAlign: 'center',
-    position: 'absolute', // Position text absolutely
+    color: "white",
+    textAlign: "center",
+    position: "absolute", // Position text absolutely
     bottom: 40, // Adjust this value to place the text below the cross
+    zIndex: 1,
   },
   bottomView: {
-    height: '30%',
-    backgroundColor: 'black',
-    alignItems: 'center',
-
+    height: "30%",
+    backgroundColor: "black",
+    alignItems: "center",
+    justifyContent: "center", // Center the button within the gradient
+  },
+  gradientBackground: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 0,
+    height: "100%",
+    zIndex: 0,
   },
   button: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 25,
     paddingVertical: 10,
     paddingHorizontal: 30,
+    zIndex: 1,
   },
   buttonText: {
     fontSize: 18,
-    color: 'black',
+    color: "black",
   },
 });
 

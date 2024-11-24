@@ -1,41 +1,47 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import HeaderComponent from '../components/EmergencyCall/Header';
-import EmergencyCard from '../components/EmergencyCall/EmergencyCard';
-import ChatCard from '../components/EmergencyCall/ChatCard';
-import BottomNavigation from '../components/EmergencyCall/Bottom';
+import React from "react";
+import { View, StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import HeaderComponent from "../components/EmergencyCall/Header";
+import EmergencyCard from "../components/EmergencyCall/EmergencyCard";
+import ChatCard from "../components/EmergencyCall/ChatCard";
+import BottomNavigation from "../components/EmergencyCall/Bottom";
 
 const EmergencyPage = () => {
   return (
-    <View style={styles.container}>
-      {/* Header Section */}
-      <HeaderComponent />
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        {/* Header Section */}
+        <HeaderComponent />
 
-      {/* Content Section */}
-      <View style={styles.content}>
-        <EmergencyCard />
-        <View style={styles.chatContainer}>
-          <ChatCard />
+        {/* Content Section */}
+        <View style={styles.content}>
+          <EmergencyCard />
+          <View style={styles.chatContainer}>
+            <ChatCard />
+          </View>
+          <EmergencyCard />
+          <EmergencyCard />
         </View>
-      </View>
-
-      {/* Bottom Navigation */}
+      </ScrollView>
       <BottomNavigation />
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
-    backgroundColor: '#F9F9F9',
+    backgroundColor: "#E6E8EB",
+    position: "relative",
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    paddingBottom: 100,
   },
   content: {
-    flex: 1, // Allow content to grow and fill available space
+    flex: 1,
   },
-  chatContainer: { // Add small space between EmergencyCard and ChatCard
-    marginBottom: 20, // Ensure more space before BottomNavigation
+  chatContainer: {
+    marginBottom: 20,
   },
 });
 
