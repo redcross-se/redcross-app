@@ -16,7 +16,7 @@ const EmergencyCard = ({ navigation }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io("http://192.168.0.114:3000");
+    const newSocket = io("https://ninety-bottles-smell.loca.lt");
     setSocket(newSocket);
 
     return () => {
@@ -32,21 +32,24 @@ const EmergencyCard = ({ navigation }) => {
       const userData = JSON.parse(user);
       const { latitude, longitude } = location.coords;
       const address = await getAddressFromCoordinates(latitude, longitude);
-
+  
       socket.emit("initiateEmergency", {
         userId: userData.id,
         location: { latitude, longitude, address },
         status: "pending",
       });
-
-      socket.on("newEmergency", (emergency) => {
-        console.log("Emergency initiated:", emergency);
-        navigation.navigate("EmergencyInfo", { emergencyId: emergency.id });
+      console.log("Emergency initiated");
+  
+      // Navigate to EmergencyInfo with parameters
+      navigation.navigate("EmergencyInfo", {
+        location: { latitude, longitude, address },
+        userId: userData.id,
       });
     } catch (error) {
       console.error("Error initiating emergency:", error);
     }
   };
+  
 
   return (
     <View style={styles.card}>
@@ -81,28 +84,28 @@ const EmergencyCard = ({ navigation }) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 15, // Larger card border radius
-    padding: 30, // Increased padding for larger card
-    marginBottom: 30, // More spacing below the card
+    borderRadius: 15,
+    padding: 30,
+    marginBottom: 30,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 3 },
     elevation: 5,
     alignItems: "center",
-    height: 400, // Larger height for the card
+    height: 400,
     justifyContent: "space-between",
     marginHorizontal: 10,
   },
   cardTitle: {
-    fontSize: 28, // Increased font size
+    fontSize: 28,
     fontWeight: "bold",
     color: "#E30613",
     marginBottom: 15,
     textAlign: "center",
   },
   cardSubtitle: {
-    fontSize: 18, // Increased font size
+    fontSize: 18,
     color: "#666",
     textAlign: "center",
     marginBottom: 25,
@@ -111,9 +114,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   sosBackgroundLayer: {
-    width: 330, // Larger background layer width
-    height: 240, // Larger background layer height
-    borderRadius: 30, // Proportionally increased border radius
+    width: 330,
+    height: 240,
+    borderRadius: 30,
     backgroundColor: "#F5F5FA",
     borderColor: "#D8D8D8",
     borderWidth: 1,
@@ -125,15 +128,15 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
   },
   sosButtonBackground: {
-    width: 200, // Larger white circular background
+    width: 200,
     height: 200,
-    borderRadius: 100, // Fully circular
+    borderRadius: 100,
     backgroundColor: "#FFF5F5",
     justifyContent: "center",
     alignItems: "center",
   },
   sosButton: {
-    width: 140, // Larger red button
+    width: 140,
     height: 140,
     borderRadius: 70,
     backgroundColor: "#E30613",
@@ -141,9 +144,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   iconPlaceholder: {
-    width: 50, // Larger placeholder icon size
+    width: 50,
     height: 50,
-    marginBottom: 10, // Space between icon and text
+    marginBottom: 10,
   },
   sosText: {
     color: "white",

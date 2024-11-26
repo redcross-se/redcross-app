@@ -5,24 +5,19 @@ import EmergencyCard from "../components/EmergencyCall/EmergencyCard";
 import ChatCard from "../components/EmergencyCall/ChatCard";
 import BottomNavigation from "../components/EmergencyCall/Bottom";
 
-const EmergencyPage = () => {
+const EmergencyPage = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {/* Header Section */}
         <HeaderComponent />
-
-        {/* Content Section */}
         <View style={styles.content}>
-          <EmergencyCard />
+          <EmergencyCard navigation={navigation} />
           <View style={styles.chatContainer}>
             <ChatCard />
           </View>
-          <EmergencyCard />
-          <EmergencyCard />
         </View>
       </ScrollView>
-      <BottomNavigation />
+      <BottomNavigation navigation={navigation} InitialTab={"home"}/>
     </SafeAreaView>
   );
 };

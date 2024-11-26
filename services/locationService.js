@@ -1,8 +1,8 @@
 import axios from "axios";
-import { GOOGLE_MAPS_API_KEY } from "@env";
+// import { GOOGLE_MAPS_API_KEY } from "@env";
 
 export const getAddressFromCoordinates = async (latitude, longitude) => {
-  const apiKey = GOOGLE_MAPS_API_KEY;
+  const apiKey = "AIzaSyBKUilOn2UjmAVpgXM-az1StDBaDyZi8n8";
   console.log("API Keys:", apiKey);
   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
 

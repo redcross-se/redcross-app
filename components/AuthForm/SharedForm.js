@@ -12,13 +12,14 @@ import {
 import PhoneInput from "react-native-phone-number-input";
 
 const SharedForm = ({ isSignUp, onSubmit, navigation }) => {
-  // Add navigation prop here
   const [form, setForm] = useState({
     fullName: "",
     email: "",
     phoneNumber: "",
     password: "",
   });
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleInputChange = (field, value) => {
     setForm({ ...form, [field]: value });
@@ -44,7 +45,7 @@ const SharedForm = ({ isSignUp, onSubmit, navigation }) => {
     >
       <View style={styles.innerContainer}>
         <Image
-          source={require("../../assets/Login.png")}
+          source={require("../../assets/Login.png")} 
           style={styles.image}
         />
         <Text style={styles.title}>{isSignUp ? "Sign up" : "Log in"}</Text>
@@ -67,7 +68,7 @@ const SharedForm = ({ isSignUp, onSubmit, navigation }) => {
                 placeholder: "Phone Number",
                 style: styles.phoneInput,
               }}
-              onChangePhoneNumber={(value) =>
+              onChangeFormattedText={(value) =>
                 handleInputChange("phoneNumber", value)
               }
             />
@@ -79,13 +80,23 @@ const SharedForm = ({ isSignUp, onSubmit, navigation }) => {
           value={form.email}
           onChangeText={(value) => handleInputChange("email", value)}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-          value={form.password}
-          onChangeText={(value) => handleInputChange("password", value)}
-        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={[styles.input, styles.passwordInput]}
+            placeholder="Password"
+            secureTextEntry={!passwordVisible}
+            value={form.password}
+            onChangeText={(value) => handleInputChange("password", value)}
+          />
+          <TouchableOpacity
+            onPress={() => setPasswordVisible(!passwordVisible)}
+            style={styles.eyeIconContainer}
+          >
+            <Text style={styles.eyeIcon}>
+              {passwordVisible ? "🙈" : "👁️"}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>
@@ -96,9 +107,12 @@ const SharedForm = ({ isSignUp, onSubmit, navigation }) => {
         <Text style={styles.orText}>OR</Text>
 
         <TouchableOpacity style={styles.googleButton}>
+          <Image
+            source={require("../../assets/google.png")} 
+            style={styles.googleIcon}
+          />
           <Text style={styles.googleButtonText}>
-            <Image style={styles.googleIcon} /> Sign {isSignUp ? "up" : "in"}{" "}
-            with Google
+            Sign {isSignUp ? "up" : "in"} with Google
           </Text>
         </TouchableOpacity>
 
@@ -106,7 +120,7 @@ const SharedForm = ({ isSignUp, onSubmit, navigation }) => {
           {isSignUp ? "Already have an account? " : "Don't have an account? "}
           <Text
             style={styles.linkText}
-            onPress={() => navigation.navigate(isSignUp ? "Login" : "SignUp")} // Use navigation prop
+            onPress={() => navigation.navigate(isSignUp ? "Login" : "SignUp")}
           >
             {isSignUp ? "Log in instead" : "Sign up"}
           </Text>
@@ -127,15 +141,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 200,
+    height: 200,
     alignSelf: "center",
     marginBottom: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#E30613", // Red color for the title
+    color: "#E30613",
     textAlign: "center",
     marginBottom: 20,
   },
@@ -147,6 +161,26 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 16,
     height: 60,
+  },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    marginBottom: 10,
+    height: 60,
+  },
+  passwordInput: {
+    flex: 1,
+    borderWidth: 0,
+    height: "100%",
+  },
+  eyeIconContainer: {
+    padding: 10,
+  },
+  eyeIcon: {
+    fontSize: 20,
   },
   button: {
     backgroundColor: "#E30613",
@@ -177,11 +211,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#000",
+    marginLeft: 10,
   },
   googleIcon: {
     width: 20,
     height: 20,
-    marginRight: 10,
   },
   footerText: {
     textAlign: "center",

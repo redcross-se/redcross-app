@@ -24,7 +24,7 @@ const OnBoarding = () => {
       <View style={styles.bottomView}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("SignUp")}
+          onPress={() => navigation.navigate("Home")}
         >
           <Text style={styles.buttonText}>Get started</Text>
         </TouchableOpacity>

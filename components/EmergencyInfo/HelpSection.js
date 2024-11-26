@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 const HelpSelection = ({ title, options }) => {
+  const [activeIndex, setActiveIndex] = useState(null); // State to track the active option index
+
+  const handleOptionPress = (index) => {
+    setActiveIndex(index); // Set the active option index
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -11,13 +17,14 @@ const HelpSelection = ({ title, options }) => {
             key={index}
             style={[
               styles.option,
-              option.isActive ? styles.activeOption : styles.inactiveOption,
+              activeIndex === index ? styles.activeOption : styles.inactiveOption,
             ]}
+            onPress={() => handleOptionPress(index)} // Update active option on press
           >
             <Text
               style={[
                 styles.optionText,
-                option.isActive ? styles.activeOptionText : styles.inactiveOptionText,
+                activeIndex === index ? styles.activeOptionText : styles.inactiveOptionText,
               ]}
             >
               {option.text}

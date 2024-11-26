@@ -1,9 +1,9 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const CancelButton = () => {
+const CancelButton = ({navigation}) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('Home')}>
       <Text style={styles.text}>Cancel Request</Text>
     </TouchableOpacity>
   );
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#000',
-    textDecorationLine: 'underline',
+
   },
 });
 

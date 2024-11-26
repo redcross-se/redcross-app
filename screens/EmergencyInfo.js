@@ -4,7 +4,7 @@ import TopSection from '../components/EmergencyInfo/TopSection';
 import HelpSelection from '../components/EmergencyInfo/HelpSection';
 import CancelButton from '../components/EmergencyInfo/CancelButton';
 
-const EmergencyInfo = () => {
+const EmergencyInfo = ({navigation}) => {
   return (
     <View style={styles.container}>
       {/* Top Image and Text Section */}
@@ -12,12 +12,10 @@ const EmergencyInfo = () => {
         heading="Connecting with responder..." 
         subtext="Please stand by, we are currently requesting for help. Nearby rescue services will see your call for help." 
       />
-
-      {/* Help Selection Section */}
       <HelpSelection
         title="Who needs help?"
         options={[
-          { text: 'Me', isActive: true },
+          { text: 'Me', isActive: false },
           { text: 'Someone else', isActive: false },
         ]}
       />
@@ -29,9 +27,7 @@ const EmergencyInfo = () => {
           { text: 'Other', isActive: false },
         ]}
       />
-
-      {/* Cancel Button Section */}
-      <CancelButton />
+      <CancelButton navigation={navigation}/>
     </View>
   );
 };

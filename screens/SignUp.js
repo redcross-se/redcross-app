@@ -3,6 +3,7 @@ import SharedForm from "../components/AuthForm/SharedForm";
 import { signUp } from "../services/authService";
 
 const SignUp = ({ navigation }) => {
+  console.log("Sign Up screen");
   const handleSignUp = async (form) => {
     try {
       const user = await signUp({ ...form, role: "user" });
