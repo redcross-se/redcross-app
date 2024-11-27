@@ -7,23 +7,13 @@ import {
   Image,
   ImageBackground,
 } from "react-native";
-import io from "socket.io-client";
+import { useSocket } from "../../context/SocketContext";
 import { getAddressFromCoordinates } from "../../services/locationService";
 import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const EmergencyCard = ({ navigation }) => {
-  const [socket, setSocket] = useState(null);
-
-  useEffect(() => {
-    const newSocket = io("https://ninety-bottles-smell.loca.lt");
-    setSocket(newSocket);
-
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
-
+  const { socket, setEmergency } = useSocket();
   const handleLongPress = async () => {
     console.log("Long press detected");
     try {
@@ -32,24 +22,24 @@ const EmergencyCard = ({ navigation }) => {
       const userData = JSON.parse(user);
       const { latitude, longitude } = location.coords;
       const address = await getAddressFromCoordinates(latitude, longitude);
-  
+
       socket.emit("initiateEmergency", {
         userId: userData.id,
         location: { latitude, longitude, address },
         status: "pending",
       });
-      console.log("Emergency initiated");
-  
-      // Navigate to EmergencyInfo with parameters
-      navigation.navigate("EmergencyInfo", {
-        location: { latitude, longitude, address },
-        userId: userData.id,
+      socket.on("newEmergency", (data) => {
+        console.log("Emergency initiated", data);
+        setEmergency(data);
+        navigation.navigate("EmergencyInfo", {
+          location: { latitude, longitude, address },
+          userId: userData.id,
+        });
       });
     } catch (error) {
       console.error("Error initiating emergency:", error);
     }
   };
-  
 
   return (
     <View style={styles.card}>

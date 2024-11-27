@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://ninety-bottles-smell.loca.lt";
+const API_URL = "https://gold-bees-learn.loca.lt";
 
 export const signUp = async (userData) => {
   try {
