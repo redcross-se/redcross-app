@@ -10,7 +10,7 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [emergency, setEmergency] = useState(null);
   useEffect(() => {
-    const newSocket = io("https://gold-bees-learn.loca.lt");
+    const newSocket = io("https://redcross-backend-production.up.railway.app");
     setSocket(newSocket);
     return () => {
       newSocket.disconnect();

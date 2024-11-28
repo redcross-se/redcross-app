@@ -1,6 +1,7 @@
 import React from "react";
 import SharedForm from "../components/AuthForm/SharedForm";
 import { signUp } from "../services/authService";
+import { Alert } from "react-native";
 
 const SignUp = ({ navigation }) => {
   console.log("Sign Up screen");
@@ -10,6 +11,8 @@ const SignUp = ({ navigation }) => {
 
       console.log("User signed up:", user);
       // Navigate to another screen or show a success message
+      Alert.alert("Success", "Sign up successful");
+      navigation.navigate("Login");
     } catch (error) {
       console.error("Sign Up Error:", error.message);
       // Show error message to the user

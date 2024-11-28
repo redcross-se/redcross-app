@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FFFFFF",
     height: 100,
-    marginBottom: -30,
+    marginBottom: -40,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",

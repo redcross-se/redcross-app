@@ -4,6 +4,7 @@ import HeaderComponent from "../components/EmergencyCall/Header";
 import EmergencyCard from "../components/EmergencyCall/EmergencyCard";
 import ChatCard from "../components/EmergencyCall/ChatCard";
 import BottomNavigation from "../components/EmergencyCall/Bottom";
+import { StatusBar, Platform } from "react-native";
 
 const EmergencyPage = ({ navigation }) => {
   return (
@@ -17,7 +18,9 @@ const EmergencyPage = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>
-      <BottomNavigation navigation={navigation} InitialTab={"home"}/>
+      <View style={styles.bottomNavigationContainer}>
+        <BottomNavigation navigation={navigation} InitialTab={"home"} />
+      </View>
     </SafeAreaView>
   );
 };
@@ -27,6 +30,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#E6E8EB",
     position: "relative",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 20 : 0,
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -35,8 +39,12 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
-  chatContainer: {
-    marginBottom: 20,
+  bottomNavigationContainer: {
+    position: "absolute",
+    bottom: 22,
+    width: "100%",
+    backgroundColor: "#FFFFFF",
+    elevation: 6,
   },
 });
 

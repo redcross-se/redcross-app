@@ -24,7 +24,7 @@ const OnBoarding = () => {
       <View style={styles.bottomView}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("Login")}
         >
           <Text style={styles.buttonText}>Get started</Text>
         </TouchableOpacity>
@@ -59,13 +59,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     position: "absolute", // Position text absolutely
     bottom: 40, // Adjust this value to place the text below the cross
-    zIndex: 1,
+    zIndex: 2,
   },
   bottomView: {
     height: "30%",
-    backgroundColor: "black",
     alignItems: "center",
-    justifyContent: "center", // Center the button within the gradient
+    justifyContent: "center",
+    zIndex: 2,
   },
   gradientBackground: {
     flex: 1,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     height: "100%",
-    zIndex: 0,
+    zIndex: 1,
   },
   button: {
     backgroundColor: "white",

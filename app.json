@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "SEMobleApp",
+    "name": "Red Cross Emergency Response",
     "slug": "SEMobleApp",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,22 +14,34 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.SEMobleApp"
+      "bundleIdentifier": "com.anonymous.RedCrossEmergencyResponse"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.SEMobleApp"
+      "package": "com.anonymous.RedCrossEmergencyResponse"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "6fb0d6a1-4bdf-4715-93e4-267f6bf93b90"
+        "projectId": "b19fe066-ded2-47a2-8242-76ce15a6f575"
       }
-    }
+    },
+    "owner": "henry_hardan",
+    "plugins": [
+      "@stream-io/video-react-native-sdk",
+      [
+        "@config-plugins/react-native-webrtc",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone"
+        }
+      ],
+      "expo-build-properties"
+    ]
   }
 }

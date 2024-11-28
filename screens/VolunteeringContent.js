@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView, Image } from 'react-native';
-import Banner from '../components/Volunteering/Banner';
-import Bottom from '../components/EmergencyCall/Bottom';
-import SectionHeader from '../components/Volunteering/SectionHeader';
+import React from "react";
+import { View, StyleSheet, ScrollView, Image } from "react-native";
+import Banner from "../components/Volunteering/Banner";
+import Bottom from "../components/EmergencyCall/Bottom";
+import SectionHeader from "../components/Volunteering/SectionHeader";
 
 const VolunteeringContent = ({ navigation }) => {
   return (
@@ -10,23 +10,23 @@ const VolunteeringContent = ({ navigation }) => {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Banner Section */}
         <Banner
-          text="Saving lives start by learning how to do so."
-          imageSource={require('../assets/heart.png')}
+          text="Saving lives starts by learning how to do so."
+          imageSource={require("../assets/heart.png")}
         />
 
         {/* Videos Section */}
         <View style={styles.sectionSpacing}>
           <SectionHeader
             title="Videos"
-            onViewAllPress={() => console.log('View all videos')}
+            onViewAllPress={() => console.log("View all videos")}
           />
           <View style={styles.imageGrid}>
             <Image
-              source={require('../assets/image3.png')} // Replace with actual image
+              source={require("../assets/image3.png")} // Replace with actual image
               style={styles.cardImage}
             />
             <Image
-              source={require('../assets/image3.png')} // Replace with actual image
+              source={require("../assets/image3.png")} // Replace with actual image
               style={styles.cardImage}
             />
           </View>
@@ -36,15 +36,15 @@ const VolunteeringContent = ({ navigation }) => {
         <View style={styles.sectionSpacing}>
           <SectionHeader
             title="Articles"
-            onViewAllPress={() => console.log('View all articles')}
+            onViewAllPress={() => console.log("View all articles")}
           />
           <View style={styles.imageGrid}>
             <Image
-              source={require('../assets/image3.png')} // Replace with actual image
+              source={require("../assets/image3.png")} // Replace with actual image
               style={styles.cardImage}
             />
             <Image
-              source={require('../assets/image3.png')} // Replace with actual image
+              source={require("../assets/image3.png")} // Replace with actual image
               style={styles.cardImage}
             />
           </View>
@@ -62,7 +62,7 @@ const VolunteeringContent = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
   },
   scrollContent: {
     padding: 16,
@@ -71,24 +71,23 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   imageGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 16,
   },
   cardImage: {
-    width: '48%',
+    width: "48%",
     height: 100,
     borderRadius: 8,
-    resizeMode: 'cover',
-    backgroundColor: '#E0E0E0',
+    resizeMode: "cover",
+    backgroundColor: "#E0E0E0",
   },
   bottomElevated: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 22,
-    width: '100%',
-    backgroundColor: '#FFFFFF',
+    width: "100%",
+    backgroundColor: "#FFFFFF",
     elevation: 6,
-    padding: 8,
   },
 });
 

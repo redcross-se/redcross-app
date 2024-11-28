@@ -12,40 +12,15 @@ import EmergencyCard from "./components/EmergencyCall/EmergencyCard";
 import Volunteer from "./screens/Volunteer";
 import Content from "./screens/VolunteeringContent";
 import { SocketProvider } from "./context/SocketContext";
-import {
-  StreamVideo,
-  StreamVideoClient,
-} from "@stream-io/video-react-native-sdk";
 import { AuthProvider } from "./context/authContext";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [streamClient, setStreamClient] = useState(null);
-  const { user, token, streamToken } = useAuth();
-
-  useEffect(() => {
-    const initializeStreamClient = async () => {
-      if (streamToken && user && token && !streamClient) {
-        const myclient = StreamVideoClient.getOrCreateInstance({
-          apiKey: "3pkfpxv4cver",
-          user: user,
-          token: streamToken,
-        });
-        setStreamClient(myclient);
-        console.log("streamClient", streamClient);
-        return () => {
-          myclient.disconnect();
-          setStreamClient(null);
-        };
-      }
-    };
-    initializeStreamClient();
-  }, []);
-
   return (
-    <AuthProvider>
-      <StreamVideo client={streamClient}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
         <SocketProvider>
           <NavigationContainer>
             <Stack.Navigator initialRouteName="OnBoarding">
@@ -61,7 +36,7 @@ export default function App() {
               />
               <Stack.Screen
                 name="Login"
-                component={Login} // Use the Login component here
+                component={Login}
                 options={{ title: "Login" }}
               />
               <Stack.Screen
@@ -102,7 +77,7 @@ export default function App() {
             </Stack.Navigator>
           </NavigationContainer>
         </SocketProvider>
-      </StreamVideo>
-    </AuthProvider>
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }
