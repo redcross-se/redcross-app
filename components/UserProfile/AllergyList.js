@@ -1,44 +1,44 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import AllergyItem from './AllergyItem';
+import React, { useState } from "react";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 
-const AllergiesList = () => {
-  const [allergies, setAllergies] = useState([
-    { id: 1, label: 'Medical', icon: require('../../assets/image3.png') },
-    { id: 2, label: 'Medical', icon: require('../../assets/image3.png') },
-    { id: 3, label: 'Medical', icon: require('../../assets/image3.png') },
-    { id: 4, label: 'Medical', icon: require('../../assets/image3.png') },
-    { id: 5, label: 'Medical', icon: require('../../assets/image3.png') },
-    { id: 6, label: 'Medical', icon: require('../../assets/image3.png') },
-  ]);
+const AllergiesList = ({ allergies, isEditing, setUserDetails }) => {
+  const [newAllergy, setNewAllergy] = useState("");
 
   const addAllergy = () => {
-    const newAllergy = {
-      id: allergies.length + 1,
-      label: 'Medical',
-      icon: require('../../assets/image3.png'),
-    };
-    setAllergies([...allergies, newAllergy]);
+    if (newAllergy) {
+      const updatedAllergies = [...allergies, newAllergy];
+      setUserDetails(updatedAllergies);
+      setNewAllergy("");
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Allergies and reactions</Text>
-      <View style={styles.allergyList}>
-        {allergies.map((item) => (
-          <AllergyItem
-            key={item.id}
-            label={item.label}
-            iconSource={item.icon}
-            onPress={() => console.log(`Pressed: ${item.label}`)}
+      <Text style={styles.title}>Allergies</Text>
+      {allergies.map((allergy, index) => (
+        <View key={index} style={styles.allergyItem}>
+          <Text style={styles.allergyText}>{allergy}</Text>
+        </View>
+      ))}
+      {isEditing && (
+        <>
+          <TextInput
+            style={styles.input}
+            placeholder="Add Allergy"
+            value={newAllergy}
+            onChangeText={(text) => setNewAllergy(text)}
           />
-        ))}
-        <AllergyItem
-          label="+ Add Allergy"
-          iconSource={require('../../assets/image3.png')} // Replace with your "add" icon
-          onPress={addAllergy}
-        />
-      </View>
+          <TouchableOpacity style={styles.addButton} onPress={addAllergy}>
+            <Text style={styles.addButtonText}>+ Add Allergy</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
@@ -46,18 +46,37 @@ const AllergiesList = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: "center",
   },
-  allergyList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-start',
+  allergyItem: {
+    marginVertical: 5,
+  },
+  allergyText: {
+    fontSize: 16,
+    color: "#333",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#CCC",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  addButton: {
+    backgroundColor: "#007BFF",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  addButtonText: {
+    color: "#FFF",
+    fontWeight: "bold",
   },
 });
 

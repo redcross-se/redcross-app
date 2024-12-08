@@ -52,13 +52,6 @@ const ChatView = ({ channelId }) => {
       ) : (
         <View>
           <Text>Loading Chat...</Text>
-          <Text>Loading Chat...</Text>
-          <Text>Loading Chat...</Text>
-          <Text>Loading Chat...</Text>
-          <Text>Loading Chat...</Text>
-          <Text>Loading Chat...</Text>
-          <Text>Loading Chat...</Text>
-          <Text>Loading Chat...</Text>
         </View>
       )}
     </>

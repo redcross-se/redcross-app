@@ -1,11 +1,26 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 
-const DetailsRow = ({ label, value }) => {
+const DetailsRow = ({ label, value, isEditing, handleInputChange, field }) => {
+  const [inputValue, setInputValue] = useState("");
+  let valueStyles = styles.value;
+  if (value.includes("Add")) {
+    valueStyles = {
+      color: "#AAA",
+    };
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <Text style={styles.value}>{value}</Text>
+      {isEditing ? (
+        <TextInput
+          style={styles.input}
+          value={inputValue}
+          onChangeText={(text) => setInputValue(text)}
+        />
+      ) : (
+        <Text style={valueStyles}>{value}</Text>
+      )}
     </View>
   );
 };
@@ -18,13 +33,21 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
     marginBottom: 5,
   },
   value: {
     fontSize: 16,
-    color: '#000',
-    fontWeight: 'bold',
+    color: "#000",
+    fontWeight: "bold",
+  },
+  input: {
+    fontSize: 16,
+    color: "#000",
+    fontWeight: "bold",
+    borderWidth: 1,
+    borderColor: "#000",
+    padding: 5,
   },
 });
 

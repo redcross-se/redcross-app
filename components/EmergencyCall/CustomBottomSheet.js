@@ -12,6 +12,7 @@ const CustomBottomSheet = forwardRef((props, ref) => {
       ref={ref}
       index={0}
       snapPoints={snapPoints}
+      style={{ paddingTop: 20 }}
       handleIndicatorStyle={{ backgroundColor: "#000" }}
       backgroundStyle={{ backgroundColor: "#fff" }}
     >
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
   containerHeadline: {
     fontSize: 24,
     fontWeight: "600",
-    padding: 0,
+    paddingTop: 10,
     textAlign: "center",
   },
 });

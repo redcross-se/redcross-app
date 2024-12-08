@@ -62,7 +62,6 @@ const CallAction = () => {
 
   return (
     <View style={styles.container}>
-      {/* <TopSection heading="Connected" subtext="00:00" /> */}
       {streamClient && userCall && (
         <StreamVideo client={streamClient}>
           <OverlayProvider>

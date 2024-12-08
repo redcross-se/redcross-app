@@ -1,20 +1,24 @@
-import React from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import React, { useEffect } from "react";
+import { View, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import Banner from "../components/Volunteering/Banner";
 import RequestCard from "../components/Volunteering/RequestCard";
 import DonationCard from "../components/Volunteering/DonationCard";
 import VolunteerCard from "../components/Volunteering/VolunteerCard";
 import Bottom from "../components/EmergencyCall/Bottom";
 import SectionHeader from "../components/Volunteering/SectionHeader";
+import { StatusBar, Platform } from "react-native";
 
 const Volunteer = ({ navigation }) => {
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Banner
           text="Saving Lives is Easy, you can start today!"
           subText="Blood Type: A+"
-          imageSource={require("../assets/heart.png")}
+          imageSource={require("../assets/Volunteering.png")}
         />
         <View style={styles.sectionSpacing}>
           <SectionHeader
@@ -53,7 +57,7 @@ const Volunteer = ({ navigation }) => {
       <View style={styles.bottomElevated}>
         <Bottom navigation={navigation} InitialTab={"favorite"} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -61,6 +65,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 20 : 0,
   },
   scrollContent: {
     padding: 16,

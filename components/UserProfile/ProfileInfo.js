@@ -1,42 +1,72 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from "react-native";
 
-const ProfileInfo = ({ name, dateOfBirth }) => {
+const ProfileInfo = ({
+  name,
+  dateOfBirth,
+  isEditing,
+  setIsEditing,
+  handleInputChange,
+}) => {
   return (
     <View style={styles.container}>
-      {/* Edit Button */}
-      <TouchableOpacity style={styles.editButton}>
+      <TouchableOpacity
+        style={styles.editButton}
+        onPress={() => setIsEditing(!isEditing)}
+      >
         <Text style={styles.editText}>Edit</Text>
       </TouchableOpacity>
-
-      {/* Profile Image */}
       <Image
-        source={require('../../assets/Login.png')} // Replace with actual image
+        source={require("../../assets/Login.png")}
         style={styles.profileImage}
       />
-
-      {/* Name and Date of Birth */}
-      <Text style={styles.name}>{name}</Text>
-      <Text style={styles.dateOfBirth}>{dateOfBirth}</Text>
+      {isEditing ? (
+        <>
+          <TextInput
+            style={styles.input}
+            placeholder="Full Name"
+            value={name}
+            onChangeText={(text) => handleInputChange("fullName", text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Date of Birth"
+            value={dateOfBirth}
+            onChangeText={(text) => handleInputChange("dob", text)}
+          />
+        </>
+      ) : (
+        <>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.dateOfBirth}>{dateOfBirth}</Text>
+        </>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: 20,
-    position: 'relative',
+    position: "relative",
   },
   editButton: {
-    position: 'absolute',
-    top: 0,
+    position: "absolute",
+    top: 20,
     right: 20,
   },
   editText: {
-    color: '#E30613',
-    fontSize: 14,
-    fontWeight: 'bold',
+    color: "#E30613",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   profileImage: {
     width: 60,
@@ -46,14 +76,21 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 5,
   },
   dateOfBirth: {
     fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
+    color: "#666",
+    textAlign: "center",
+  },
+  input: {
+    borderBottomWidth: 0.5,
+    marginBottom: 10,
+    width: "80%",
+    textAlign: "center",
+    fontSize: 16,
   },
 });
 

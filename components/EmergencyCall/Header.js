@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAddressFromCoordinates } from "../../services/locationService";
+import { useNavigation } from "@react-navigation/native";
 
 const HeaderComponent = () => {
   const [location, setLocation] = useState("Fetching location...");
   const [userData, setUserData] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     // Load user data
@@ -49,7 +51,9 @@ const HeaderComponent = () => {
         />
         <View>
           <Text style={styles.userName}>{userName}</Text>
-          <Text style={styles.completeProfile}>Complete profile</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+            <Text style={styles.completeProfile}>Complete profile</Text>
+          </TouchableOpacity>
         </View>
       </View>
 

@@ -1,40 +1,56 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import ContactItem from './ContactItem';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 
-const EmergencyContacts = () => {
-  const [contacts, setContacts] = useState([
-    { id: 1, name: 'Mom', phone: '+961 03 425 582' },
-    { id: 2, name: 'Dad', phone: '+961 03 425 583' },
-  ]);
+const EmergencyContacts = ({ contacts, isEditing, setUserDetails }) => {
+  const [newContact, setNewContact] = useState({ name: "", phone: "" });
 
   const addContact = () => {
-    const newContact = {
-      id: contacts.length + 1,
-      name: 'New Contact',
-      phone: '+961 03 123 456',
-    };
-    setContacts([...contacts, newContact]);
-  };
-
-  const editContact = (id) => {
-    console.log(`Edit contact with id: ${id}`);
+    if (newContact.name && newContact.phone) {
+      const updatedContacts = [...contacts, newContact];
+      setUserDetails(updatedContacts);
+      setNewContact({ name: "", phone: "" });
+    }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Emergency Contacts</Text>
-      {contacts.map((contact) => (
-        <ContactItem
-          key={contact.id}
-          name={contact.name}
-          phone={contact.phone}
-          onEdit={() => editContact(contact.id)}
-        />
+      {contacts.map((contact, index) => (
+        <View key={index} style={styles.contactItem}>
+          <Text style={styles.contactText}>
+            {contact.name} - {contact.phone}
+          </Text>
+        </View>
       ))}
-      <TouchableOpacity style={styles.addButton} onPress={addContact}>
-        <Text style={styles.addButtonText}>+ Add Emergency Contact</Text>
-      </TouchableOpacity>
+      {isEditing && (
+        <>
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            value={newContact.name}
+            onChangeText={(text) =>
+              setNewContact({ ...newContact, name: text })
+            }
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Phone Number"
+            value={newContact.phone}
+            onChangeText={(text) =>
+              setNewContact({ ...newContact, phone: text })
+            }
+          />
+          <TouchableOpacity style={styles.addButton} onPress={addContact}>
+            <Text style={styles.addButtonText}>+ Add Emergency Contact</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
@@ -42,26 +58,37 @@ const EmergencyContacts = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: "center",
+  },
+  contactItem: {
+    marginVertical: 5,
+  },
+  contactText: {
+    fontSize: 16,
+    color: "#333",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#CCC",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
   },
   addButton: {
-    marginTop: 10,
-    paddingVertical: 15,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#CCC',
-    alignItems: 'center',
-    backgroundColor: '#F9F9F9',
+    backgroundColor: "#007BFF",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
   },
   addButtonText: {
-    fontSize: 16,
-    color: '#666',
+    color: "#FFF",
+    fontWeight: "bold",
   },
 });
 

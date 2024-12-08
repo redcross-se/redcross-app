@@ -1,12 +1,19 @@
 import React from "react";
-import { View, StyleSheet, ScrollView, Image } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  SafeAreaView,
+} from "react-native";
 import Banner from "../components/Volunteering/Banner";
 import Bottom from "../components/EmergencyCall/Bottom";
 import SectionHeader from "../components/Volunteering/SectionHeader";
+import { StatusBar, Platform } from "react-native";
 
 const VolunteeringContent = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Banner Section */}
         <Banner
@@ -55,7 +62,7 @@ const VolunteeringContent = ({ navigation }) => {
       <View style={styles.bottomElevated}>
         <Bottom navigation={navigation} InitialTab={"record"} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -63,6 +70,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 20 : 0,
   },
   scrollContent: {
     padding: 16,

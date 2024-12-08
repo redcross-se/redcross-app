@@ -42,10 +42,11 @@ const SharedForm = ({ isSignUp, onSubmit, navigation }) => {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 30 : 20}
     >
       <View style={styles.innerContainer}>
         <Image
-          source={require("../../assets/Login.png")} 
+          source={require("../../assets/Login.png")}
           style={styles.image}
         />
         <Text style={styles.title}>{isSignUp ? "Sign up" : "Log in"}</Text>
@@ -56,6 +57,7 @@ const SharedForm = ({ isSignUp, onSubmit, navigation }) => {
               style={styles.input}
               placeholder="Full Name"
               value={form.fullName}
+              autoCapitalize="words"
               onChangeText={(value) => handleInputChange("fullName", value)}
             />
             <PhoneInput
@@ -78,6 +80,7 @@ const SharedForm = ({ isSignUp, onSubmit, navigation }) => {
           style={styles.input}
           placeholder="Email"
           value={form.email}
+          autoCapitalize="none"
           onChangeText={(value) => handleInputChange("email", value)}
         />
         <View style={styles.passwordContainer}>
@@ -86,6 +89,8 @@ const SharedForm = ({ isSignUp, onSubmit, navigation }) => {
             placeholder="Password"
             secureTextEntry={!passwordVisible}
             value={form.password}
+            autoCapitalize="none"
+            autoFocus={true}
             onChangeText={(value) => handleInputChange("password", value)}
           />
           <TouchableOpacity
@@ -93,7 +98,7 @@ const SharedForm = ({ isSignUp, onSubmit, navigation }) => {
             style={styles.eyeIconContainer}
           >
             <Text style={styles.eyeIcon}>
-              {passwordVisible ? "🙈" : "👁️"}
+              {passwordVisible ? "Hide" : "Show"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -108,7 +113,7 @@ const SharedForm = ({ isSignUp, onSubmit, navigation }) => {
 
         <TouchableOpacity style={styles.googleButton}>
           <Image
-            source={require("../../assets/google.png")} 
+            source={require("../../assets/google.png")}
             style={styles.googleIcon}
           />
           <Text style={styles.googleButtonText}>
@@ -174,13 +179,14 @@ const styles = StyleSheet.create({
   passwordInput: {
     flex: 1,
     borderWidth: 0,
+    paddingTop: 15,
     height: "100%",
   },
   eyeIconContainer: {
-    padding: 10,
+    paddingHorizontal: 10,
   },
   eyeIcon: {
-    fontSize: 20,
+    fontSize: 16,
   },
   button: {
     backgroundColor: "#E30613",

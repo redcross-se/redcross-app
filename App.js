@@ -62,17 +62,25 @@ export default function App() {
               <Stack.Screen
                 name="Profile"
                 component={Profile}
-                options={{ title: "Profile" }}
+                options={{
+                  title: "Profile",
+                  animation: "simple_push",
+                  presentation: "modal",
+                }}
               />
               <Stack.Screen
                 name="Volunteer"
                 component={Volunteer}
-                options={{ title: "Volunteer" }}
+                options={{ title: "Volunteer", animation: "simple_push" }}
               />
               <Stack.Screen
                 name="Content"
                 component={Content}
-                options={{ title: "Content" }}
+                options={{
+                  title: "Content",
+                  animation: "simple_push",
+                  headerShown: false,
+                }}
               />
             </Stack.Navigator>
           </NavigationContainer>

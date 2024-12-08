@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   StyleSheet,
   Image,
   ImageBackground,
@@ -11,11 +11,30 @@ import { useSocket } from "../../context/SocketContext";
 import { getAddressFromCoordinates } from "../../services/locationService";
 import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  Easing,
+  cancelAnimation,
+  runOnJS,
+} from "react-native-reanimated";
 
 const EmergencyCard = ({ navigation }) => {
   const { socket, setEmergency } = useSocket();
+
+  const [countdown, setCountdown] = useState("Hold for\n3 seconds");
+  const timerRef = useRef(null);
+
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
   const handleLongPress = async () => {
-    console.log("Long press detected");
     try {
       const location = await Location.getCurrentPositionAsync({});
       const user = await AsyncStorage.getItem("user");
@@ -28,8 +47,8 @@ const EmergencyCard = ({ navigation }) => {
         location: { latitude, longitude, address },
         status: "pending",
       });
+
       socket.on("newEmergency", (data) => {
-        console.log("Emergency initiated", data);
         setEmergency(data);
         navigation.navigate("EmergencyInfo", {
           location: { latitude, longitude, address },
@@ -41,6 +60,58 @@ const EmergencyCard = ({ navigation }) => {
     }
   };
 
+  const handlePressIn = () => {
+    // Reset countdown in case it was in another state
+    setCountdown("3");
+    // Animate scale up over 3 seconds
+    scale.value = withTiming(
+      1.2,
+      {
+        duration: 3000,
+        easing: Easing.linear,
+      },
+      (finished) => {
+        // If finished naturally, user held for full 3 seconds
+        if (finished) {
+          // On the UI thread callback: run the JS callback
+          // Wrap in runOnJS if needed. For simplicity, assume no concurrency issues:
+          runOnJS(handleLongPress)();
+        }
+      }
+    );
+
+    // Start the countdown visually
+    let secondsRemaining = 3;
+    timerRef.current = setInterval(() => {
+      secondsRemaining -= 1;
+      if (secondsRemaining > 0) {
+        setCountdown(String(secondsRemaining));
+      } else {
+        // Timer completes - at this point, handleLongPress will run from animation callback
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    }, 1000);
+  };
+
+  const handlePressOut = () => {
+    // If user releases early, cancel everything
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+
+    // Reset countdown text
+    setCountdown("Hold for\n3 seconds");
+
+    // Cancel animation
+    cancelAnimation(scale);
+    scale.value = withTiming(1, {
+      duration: 200,
+      easing: Easing.out(Easing.ease),
+    });
+  };
+
   return (
     <View style={styles.card}>
       <Text style={styles.cardTitle}>Emergency?</Text>
@@ -50,20 +121,21 @@ const EmergencyCard = ({ navigation }) => {
       <View style={styles.sosButtonWrapper}>
         <View style={styles.sosBackgroundLayer}>
           <ImageBackground
-            source={require("../../assets/EmergencyEllipse.svg")}
+            source={require("../../assets/Emergency.svg")}
             style={styles.sosButtonBackground}
           >
-            <TouchableOpacity
-              style={styles.sosButton}
-              onLongPress={handleLongPress}
+            <TouchableWithoutFeedback
+              onPressIn={handlePressIn}
+              onPressOut={handlePressOut}
             >
-              <Image
-                source={require("../../assets/EmergencyButtonIcon.png")}
-                style={styles.iconPlaceholder}
-              />
-              <Text style={styles.sosText}>Hold for</Text>
-              <Text style={styles.sosText}>3 seconds</Text>
-            </TouchableOpacity>
+              <Animated.View style={[styles.sosButton, animatedStyle]}>
+                <Image
+                  source={require("../../assets/EmergencyButtonIcon.png")}
+                  style={styles.iconPlaceholder}
+                />
+                <Text style={styles.sosText}>{countdown}</Text>
+              </Animated.View>
+            </TouchableWithoutFeedback>
           </ImageBackground>
         </View>
       </View>

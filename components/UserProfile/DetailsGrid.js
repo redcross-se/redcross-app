@@ -1,27 +1,51 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import DetailsRow from './DetailsRow';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import DetailsRow from "./DetailsRow";
 
-const DetailsGrid = ({ details }) => {
+const DetailsGrid = ({ details, isEditing, handleInputChange }) => {
   return (
     <View style={styles.gridContainer}>
       {/* First Row */}
       <View style={styles.row}>
         <View style={[styles.cell, styles.rightBorder]}>
-          <DetailsRow label={details[0].label} value={details[0].value} />
+          <DetailsRow
+            label={details[0].label}
+            value={details[0].value}
+            isEditing={isEditing}
+            handleInputChange={handleInputChange}
+            field="age"
+          />
         </View>
         <View style={styles.cell}>
-          <DetailsRow label={details[1].label} value={details[1].value} />
+          <DetailsRow
+            label={details[1].label}
+            value={details[1].value}
+            isEditing={isEditing}
+            handleInputChange={handleInputChange}
+            field="bloodType"
+          />
         </View>
       </View>
 
       {/* Second Row */}
       <View style={styles.row}>
         <View style={[styles.cell, styles.rightBorder]}>
-          <DetailsRow label={details[2].label} value={details[2].value} />
+          <DetailsRow
+            label={details[2].label}
+            value={details[2].value}
+            isEditing={isEditing}
+            handleInputChange={handleInputChange}
+            field="height"
+          />
         </View>
         <View style={styles.cell}>
-          <DetailsRow label={details[3].label} value={details[3].value} />
+          <DetailsRow
+            label={details[3].label}
+            value={details[3].value}
+            isEditing={isEditing}
+            handleInputChange={handleInputChange}
+            field="weight"
+          />
         </View>
       </View>
     </View>
@@ -31,14 +55,14 @@ const DetailsGrid = ({ details }) => {
 const styles = StyleSheet.create({
   gridContainer: {
     borderWidth: 1,
-    borderColor: '#DDD',
+    borderColor: "#DDD",
     borderRadius: 8,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     borderBottomWidth: 1,
-    borderColor: '#DDD',
+    borderColor: "#DDD",
   },
   cell: {
     flex: 1,
@@ -46,7 +70,7 @@ const styles = StyleSheet.create({
   },
   rightBorder: {
     borderRightWidth: 1,
-    borderColor: '#DDD',
+    borderColor: "#DDD",
   },
 });
 

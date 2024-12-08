@@ -3,6 +3,7 @@ import SharedForm from "../components/AuthForm/SharedForm";
 import { signIn } from "../services/authService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "../context/authContext";
+import { Alert } from "react-native";
 
 const Login = ({ navigation }) => {
   const { setUser, setToken, setStreamToken } = useAuth();
@@ -20,6 +21,7 @@ const Login = ({ navigation }) => {
       setStreamToken(streamToken);
       navigation.navigate("Home");
     } catch (error) {
+      console.log("Error:", error);
       Alert.alert("Error", error.message);
     }
   };

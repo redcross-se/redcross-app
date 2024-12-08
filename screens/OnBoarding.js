@@ -7,19 +7,25 @@ import {
   StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Dimensions } from "react-native";
+
+const { width: WIDTH } = Dimensions.get("window");
 
 const OnBoarding = () => {
   const navigation = useNavigation(); // Get navigation object
 
   return (
     <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.redCross}>RED CROSS</Text>
+        <Text style={styles.title}>Together For Humanity</Text>
+      </View>
       <View style={styles.topView}>
         <ImageBackground
           source={require("../assets/image3.png")}
           style={styles.background}
           imageStyle={styles.imageStyle}
         ></ImageBackground>
-        <Text style={styles.title}>Together For Humanity</Text>
       </View>
       <View style={styles.bottomView}>
         <TouchableOpacity
@@ -46,6 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
+    zIndex: 0,
   },
   background: {
     flex: 1,
@@ -53,13 +60,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  title: {
+  titleContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    zIndex: 2,
+  },
+  redCross: {
     fontSize: 48,
     color: "white",
     textAlign: "center",
-    position: "absolute", // Position text absolutely
-    bottom: 40, // Adjust this value to place the text below the cross
-    zIndex: 2,
+    fontWeight: "bold",
+  },
+  title: {
+    fontSize: 24,
+    color: "white",
+    textAlign: "center",
   },
   bottomView: {
     height: "30%",
@@ -82,7 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 10,
     paddingHorizontal: 30,
-    zIndex: 1,
+    zIndex: 5,
   },
   buttonText: {
     fontSize: 18,
