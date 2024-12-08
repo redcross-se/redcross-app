@@ -5,7 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Button,
   ScrollView,
+  SafeAreaView,
   Image,
   Alert,
   Platform,
@@ -13,8 +15,9 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import { updateProfile } from "../services/userService";
+import Bottom from "../components/EmergencyCall/Bottom";
 
-const Settings = () => {
+const Settings = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState("profile");
   const [user, setUser] = useState({
     email: "",
@@ -94,8 +97,18 @@ const Settings = () => {
     }
   };
 
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("token");
+    await AsyncStorage.removeItem("user");
+    //destroy navigation stack
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Login" }],
+    });
+  };
+
   const renderProfileTab = () => (
-    <View style={styles.tabContent}>
+    <SafeAreaView style={styles.tabContent}>
       <TextInput
         style={styles.input}
         placeholder="Full Name"
@@ -119,11 +132,11 @@ const Settings = () => {
       <TouchableOpacity style={styles.button} onPress={handleUpdateProfile}>
         <Text style={styles.buttonText}>Update Profile</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 
   const renderPasswordTab = () => (
-    <View style={styles.tabContent}>
+    <SafeAreaView style={styles.tabContent}>
       <TextInput
         style={styles.input}
         placeholder="Current Password"
@@ -154,48 +167,62 @@ const Settings = () => {
       <TouchableOpacity style={styles.button} onPress={handlePasswordChange}>
         <Text style={styles.buttonText}>Change Password</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 
   const renderProfilePictureTab = () => (
-    <View style={styles.tabContent}>
+    <SafeAreaView style={styles.tabContent}>
       {profileImage && (
         <Image source={{ uri: profileImage }} style={styles.profileImage} />
       )}
       <TouchableOpacity style={styles.button} onPress={pickImage}>
         <Text style={styles.buttonText}>Choose Photo</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
-      <View style={styles.tabBar}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <Text style={styles.title}>Settings</Text>
+        <View style={styles.tabBar}>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === "profile" && styles.activeTab]}
+            onPress={() => setActiveTab("profile")}
+          >
+            <Text style={styles.tabText}>Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === "password" && styles.activeTab]}
+            onPress={() => setActiveTab("password")}
+          >
+            <Text style={styles.tabText}>Password</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === "picture" && styles.activeTab]}
+            onPress={() => setActiveTab("picture")}
+          >
+            <Text style={styles.tabText}>Picture</Text>
+          </TouchableOpacity>
+        </View>
+        {activeTab === "profile" && renderProfileTab()}
+        {activeTab === "password" && renderPasswordTab()}
+        {activeTab === "picture" && renderProfilePictureTab()}
+        {/* Push to the bottom of the screen */}
         <TouchableOpacity
-          style={[styles.tab, activeTab === "profile" && styles.activeTab]}
-          onPress={() => setActiveTab("profile")}
+          style={[
+            styles.logoutButton,
+            { bottom: activeTab === "picture" ? -542 : -350 },
+          ]}
+          onPress={handleLogout}
         >
-          <Text style={styles.tabText}>Profile</Text>
+          <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, activeTab === "password" && styles.activeTab]}
-          onPress={() => setActiveTab("password")}
-        >
-          <Text style={styles.tabText}>Password</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, activeTab === "picture" && styles.activeTab]}
-          onPress={() => setActiveTab("picture")}
-        >
-          <Text style={styles.tabText}>Picture</Text>
-        </TouchableOpacity>
+      </ScrollView>
+      <View style={styles.bottomElevated}>
+        <Bottom navigation={navigation} InitialTab={"settings"} />
       </View>
-
-      {activeTab === "profile" && renderProfileTab()}
-      {activeTab === "password" && renderPasswordTab()}
-      {activeTab === "picture" && renderProfilePictureTab()}
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -223,10 +250,10 @@ const styles = StyleSheet.create({
   },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: "#007AFF",
+    borderBottomColor: "#E30613",
   },
   tabText: {
-    color: "#007AFF",
+    color: "#E30613",
   },
   tabContent: {
     padding: 20,
@@ -238,8 +265,17 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 15,
   },
+  logoutButton: {
+    position: "absolute",
+    width: "100%",
+    backgroundColor: "#F34646",
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 20,
+  },
   button: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#E30613",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",
@@ -255,6 +291,17 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     alignSelf: "center",
     marginBottom: 20,
+  },
+  scrollView: {
+    flex: 1,
+    padding: 20,
+  },
+  bottomElevated: {
+    position: "absolute",
+    bottom: 22,
+    width: "100%",
+    backgroundColor: "#FFFFFF",
+    elevation: 6,
   },
 });
 
