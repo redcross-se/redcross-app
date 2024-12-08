@@ -1,72 +1,22 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-} from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
+// ProfileInfo.js
+import React from "react";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+// import { Ionicons } from "@expo/vector-icons";
+import Edit from "../../assets/edit.png";
 
-const ProfileInfo = ({
-  name,
-  dateOfBirth,
-  isEditing,
-  setIsEditing,
-  handleInputChange,
-}) => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
-  const handleDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || new Date(dateOfBirth);
-    setShowDatePicker(false);
-    handleInputChange("dob", currentDate.toISOString().split("T")[0]);
-    // Calculate age
-    const age = new Date().getFullYear() - currentDate.getFullYear();
-    handleInputChange("age", age.toString());
-  };
-
+const ProfileInfo = ({ name, onEditName }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.editButton}
-        onPress={() => setIsEditing(!isEditing)}
-      >
-        <Text style={styles.editText}>Edit</Text>
-      </TouchableOpacity>
       <Image
         source={require("../../assets/Login.png")}
         style={styles.profileImage}
       />
-      {isEditing ? (
-        <>
-          <TextInput
-            style={styles.input}
-            placeholder="Full Name"
-            value={name}
-            onChangeText={(text) => handleInputChange("fullName", text)}
-          />
-          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-            <Text style={styles.input}>
-              {dateOfBirth || "Select Date of Birth"}
-            </Text>
-          </TouchableOpacity>
-          {showDatePicker && (
-            <DateTimePicker
-              value={new Date(dateOfBirth) || new Date()}
-              mode="date"
-              display="default"
-              onChange={handleDateChange}
-            />
-          )}
-        </>
-      ) : (
-        <>
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.dateOfBirth}>{dateOfBirth}</Text>
-        </>
-      )}
+      <View style={styles.nameContainer}>
+        <Text style={styles.name}>{name}</Text>
+        <TouchableOpacity onPress={onEditName} style={styles.editIcon}>
+          <Image source={Edit} style={styles.editIcon} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -77,39 +27,25 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     position: "relative",
   },
-  editButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-  },
-  editText: {
-    color: "#E30613",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   profileImage: {
     width: 60,
     height: 60,
     borderRadius: 30,
     marginBottom: 10,
   },
+  nameContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   name: {
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 5,
+    marginRight: 8,
   },
-  dateOfBirth: {
-    fontSize: 14,
-    color: "#666",
-    textAlign: "center",
-  },
-  input: {
-    borderBottomWidth: 0.5,
-    marginBottom: 10,
-    width: "80%",
-    textAlign: "center",
-    fontSize: 16,
+  editIcon: {
+    width: 15,
+    height: 15,
   },
 });
 

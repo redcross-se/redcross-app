@@ -1,5 +1,6 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+// ContactItem.js
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 const ContactItem = ({ name, phone, onEdit }) => {
   return (
@@ -17,16 +18,16 @@ const ContactItem = ({ name, phone, onEdit }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#FFF',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#FFF",
     padding: 15,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#EEE',
+    borderColor: "#EEE",
     marginVertical: 5,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 2,
@@ -37,18 +38,18 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 5,
   },
   phone: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   editButton: {
     fontSize: 14,
-    color: '#E30613',
-    fontWeight: 'bold', 
+    color: "#E30613",
+    fontWeight: "bold",
   },
 });
 

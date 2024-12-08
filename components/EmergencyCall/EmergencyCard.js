@@ -63,33 +63,32 @@ const EmergencyCard = ({ navigation }) => {
   const handlePressIn = () => {
     // Reset countdown in case it was in another state
     setCountdown("3");
+
+    // Start a timeout to trigger emergency after exactly 3 seconds
+    const emergencyTimeout = setTimeout(() => {
+      handleLongPress();
+    }, 3000);
+
+    // Store the timeout reference so we can clear it if needed
+    timerRef.current = {
+      countdownInterval: null,
+      emergencyTimeout,
+    };
+
     // Animate scale up over 3 seconds
-    scale.value = withTiming(
-      1.2,
-      {
-        duration: 3000,
-        easing: Easing.linear,
-      },
-      (finished) => {
-        // If finished naturally, user held for full 3 seconds
-        if (finished) {
-          // On the UI thread callback: run the JS callback
-          // Wrap in runOnJS if needed. For simplicity, assume no concurrency issues:
-          runOnJS(handleLongPress)();
-        }
-      }
-    );
+    scale.value = withTiming(1.2, {
+      duration: 3000,
+      easing: Easing.linear,
+    });
 
     // Start the countdown visually
     let secondsRemaining = 3;
-    timerRef.current = setInterval(() => {
+    timerRef.current.countdownInterval = setInterval(() => {
       secondsRemaining -= 1;
       if (secondsRemaining > 0) {
         setCountdown(String(secondsRemaining));
       } else {
-        // Timer completes - at this point, handleLongPress will run from animation callback
-        clearInterval(timerRef.current);
-        timerRef.current = null;
+        clearInterval(timerRef.current.countdownInterval);
       }
     }, 1000);
   };
@@ -97,7 +96,8 @@ const EmergencyCard = ({ navigation }) => {
   const handlePressOut = () => {
     // If user releases early, cancel everything
     if (timerRef.current) {
-      clearInterval(timerRef.current);
+      clearInterval(timerRef.current.countdownInterval);
+      clearTimeout(timerRef.current.emergencyTimeout);
       timerRef.current = null;
     }
 

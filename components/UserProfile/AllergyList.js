@@ -1,44 +1,33 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Picker } from "react-native";
+// AllergyList.js
+import React from "react";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import AllergyItem from "./AllergyItem";
 
-const AllergiesList = ({ allergies, isEditing, setUserDetails }) => {
-  const [newAllergy, setNewAllergy] = useState("");
-
-  const addAllergy = () => {
-    if (newAllergy) {
-      const updatedAllergies = [...allergies, newAllergy];
-      setUserDetails(updatedAllergies);
-      setNewAllergy("");
-    }
-  };
-
+const AllergiesList = ({ allergies, onAddAllergy, onRemoveAllergy }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Allergies</Text>
-      {allergies.map((allergy, index) => (
-        <View key={index} style={styles.allergyItem}>
-          <Text style={styles.allergyText}>{allergy}</Text>
-        </View>
-      ))}
-      {isEditing && (
-        <>
-          <Picker
-            selectedValue={newAllergy}
-            style={styles.input}
-            onValueChange={(itemValue) => setNewAllergy(itemValue)}
-          >
-            <Picker.Item label="Select Allergy" value="" />
-            <Picker.Item label="Peanuts" value="Peanuts" />
-            <Picker.Item label="Shellfish" value="Shellfish" />
-            <Picker.Item label="Milk" value="Milk" />
-            <Picker.Item label="Eggs" value="Eggs" />
-            <Picker.Item label="Soy" value="Soy" />
-            <Picker.Item label="Wheat" value="Wheat" />
-          </Picker>
-          <TouchableOpacity style={styles.addButton} onPress={addAllergy}>
-            <Text style={styles.addButtonText}>+ Add Allergy</Text>
-          </TouchableOpacity>
-        </>
+      {allergies.length > 0 ? (
+        allergies.map((allergy, index) => (
+          <View key={index} style={styles.allergyItemContainer}>
+            <AllergyItem allergy={allergy} />
+            <TouchableOpacity
+              style={styles.removeButton}
+              onPress={() => onRemoveAllergy(allergy)}
+            >
+              <Text style={styles.removeButtonText}>Remove</Text>
+            </TouchableOpacity>
+          </View>
+        ))
+      ) : (
+        <TouchableOpacity style={styles.addRow} onPress={onAddAllergy}>
+          <Text style={styles.addText}>Add an allergy</Text>
+        </TouchableOpacity>
+      )}
+      {allergies.length > 0 && (
+        <TouchableOpacity style={styles.editRow} onPress={onAddAllergy}>
+          <Text style={styles.addText}>Add Allergy</Text>
+        </TouchableOpacity>
       )}
     </View>
   );
@@ -48,6 +37,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: "#FFF",
+    marginBottom: 20,
   },
   title: {
     fontSize: 18,
@@ -55,29 +45,45 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
-  allergyItem: {
-    marginVertical: 5,
-  },
-  allergyText: {
-    fontSize: 16,
-    color: "#333",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#CCC",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-  },
-  addButton: {
-    backgroundColor: "#007BFF",
-    padding: 10,
-    borderRadius: 5,
+  addRow: {
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    borderColor: "#E30613",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 10,
   },
-  addButtonText: {
-    color: "#FFF",
+  editRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    borderColor: "#E30613",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  addText: {
+    color: "#E30613",
+    marginLeft: 5,
     fontWeight: "bold",
+  },
+  removeButton: {
+    marginLeft: 10,
+    padding: 5,
+    backgroundColor: "#E30613",
+    borderRadius: 5,
+  },
+  removeButtonText: {
+    color: "#FFF",
+    fontSize: 12,
+  },
+  allergyItemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
   },
 });
 

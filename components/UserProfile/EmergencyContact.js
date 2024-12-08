@@ -1,55 +1,33 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+// EmergencyContact.js
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import ContactItem from "./ContactItem";
+// import { Ionicons } from "@expo/vector-icons";
 
-const EmergencyContacts = ({ contacts, isEditing, setUserDetails }) => {
-  const [newContact, setNewContact] = useState({ name: "", phone: "" });
-
-  const addContact = () => {
-    if (newContact.name && newContact.phone) {
-      const updatedContacts = [...contacts, newContact];
-      setUserDetails(updatedContacts);
-      setNewContact({ name: "", phone: "" });
-    }
-  };
-
+const EmergencyContacts = ({ contacts, onAddContact, onSaveContacts }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Emergency Contacts</Text>
-      {contacts.map((contact, index) => (
-        <View key={index} style={styles.contactItem}>
-          <Text style={styles.contactText}>
-            {contact.name} - {contact.phone}
-          </Text>
-        </View>
-      ))}
-      {isEditing && (
-        <>
-          <TextInput
-            style={styles.input}
-            placeholder="Name"
-            value={newContact.name}
-            onChangeText={(text) =>
-              setNewContact({ ...newContact, name: text })
-            }
+      {contacts.length > 0 ? (
+        contacts.map((contact, index) => (
+          <ContactItem
+            key={index}
+            name={contact.name}
+            phone={contact.phone}
+            onEdit={() => onSaveContacts(contacts)}
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Phone Number"
-            value={newContact.phone}
-            onChangeText={(text) =>
-              setNewContact({ ...newContact, phone: text })
-            }
-          />
-          <TouchableOpacity style={styles.addButton} onPress={addContact}>
-            <Text style={styles.addButtonText}>+ Add Emergency Contact</Text>
-          </TouchableOpacity>
-        </>
+        ))
+      ) : (
+        <TouchableOpacity style={styles.addRow} onPress={onAddContact}>
+          {/* <Ionicons name="ios-add" size={20} color="#E30613" /> */}
+          <Text style={styles.addText}>Add an emergency contact</Text>
+        </TouchableOpacity>
+      )}
+      {contacts.length > 0 && (
+        <TouchableOpacity style={styles.editRow} onPress={onAddContact}>
+          {/* <Ionicons name="ios-pencil" size={20} color="#E30613" /> */}
+          <Text style={styles.addText}>Add Contact</Text>
+        </TouchableOpacity>
       )}
     </View>
   );
@@ -59,6 +37,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: "#FFF",
+    marginBottom: 20,
   },
   title: {
     fontSize: 18,
@@ -66,28 +45,28 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
-  contactItem: {
-    marginVertical: 5,
-  },
-  contactText: {
-    fontSize: 16,
-    color: "#333",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#CCC",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-  },
-  addButton: {
-    backgroundColor: "#007BFF",
-    padding: 10,
-    borderRadius: 5,
+  addRow: {
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    borderColor: "#E30613",
+    borderWidth: 1,
+    borderRadius: 5,
   },
-  addButtonText: {
-    color: "#FFF",
+  editRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    borderColor: "#E30613",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  addText: {
+    color: "#E30613",
+    marginLeft: 5,
     fontWeight: "bold",
   },
 });

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import Banner from "../components/Volunteering/Banner";
 import RequestCard from "../components/Volunteering/RequestCard";
@@ -7,34 +7,75 @@ import VolunteerCard from "../components/Volunteering/VolunteerCard";
 import Bottom from "../components/EmergencyCall/Bottom";
 import SectionHeader from "../components/Volunteering/SectionHeader";
 import { StatusBar, Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getBloodRequests } from "../services/userService";
 
 const Volunteer = ({ navigation }) => {
+  const [requests, setRequests] = useState([]);
+  const [userBloodType, setUserBloodType] = useState(null);
+  const [userData, setUserData] = useState(null);
+
+  function isCompatible(userBloodType, requestBloodType) {
+    const compatibilityMap = {
+      O: ["O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+"],
+      A: ["A-", "A+", "AB-", "AB+"],
+      B: ["B-", "B+", "AB-", "AB+"],
+      AB: ["AB-", "AB+"],
+    };
+    //Request blood types is a JSON array of strings
+    for (let i = 0; i < requestBloodType.length; i++) {
+      if (
+        compatibilityMap[userBloodType.charAt(0)].includes(requestBloodType[i])
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
+    loadUserAndRequests();
   }, [navigation]);
+
+  const loadUserAndRequests = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const userData = JSON.parse(await AsyncStorage.getItem("user"));
+      setUserBloodType(userData.bloodType);
+      setUserData(userData);
+
+      const requestsData = await getBloodRequests(token);
+      const compatibleRequests = requestsData.filter((request) =>
+        isCompatible(userData.bloodType, request.bloodTypes)
+      );
+      setRequests(compatibleRequests.slice(0, 3)); // Get top 3 compatible requests
+    } catch (error) {
+      console.error("Error loading requests:", error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Banner
           text="Saving Lives is Easy, you can start today!"
-          subText="Blood Type: A+"
+          subText={`Blood Type: ${userBloodType || ""}`}
           imageSource={require("../assets/Volunteering.png")}
         />
         <View style={styles.sectionSpacing}>
           <SectionHeader
             title="Requests"
-            onViewAllPress={() => console.log("View all requests")}
+            onViewAllPress={() => navigation.navigate("RequestsList")}
           />
-          <RequestCard
-            hospitalName="X Hospital"
-            bloodType="A+, A-"
-            onPress={() => console.log("Urgent pressed")}
-          />
-          <RequestCard
-            hospitalName="Y Hospital"
-            bloodType="B+, B-"
-            onPress={() => console.log("Urgent pressed")}
-          />
+          {requests.map((request, index) => (
+            <RequestCard
+              key={request.id || index}
+              hospitalName={request.hospital}
+              bloodType={request.bloodTypes.join(", ")}
+              onPress={() => navigation.navigate("RequestDetails", { request })}
+            />
+          ))}
         </View>
         <View style={styles.sectionSpacing}>
           <SectionHeader title="Donations" />
@@ -49,7 +90,7 @@ const Volunteer = ({ navigation }) => {
           <SectionHeader title="Volunteering" />
           <VolunteerCard
             text="Start saving lives"
-            onPress={() => console.log("Apply pressed")}
+            onPress={() => navigation.navigate("VolunteerForm", { userData })}
           />
         </View>
       </ScrollView>

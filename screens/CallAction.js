@@ -11,6 +11,7 @@ import ThreeButtonGroup from "../components/CallAction/ThreeButtonGroup";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import { useSocket } from "../context/SocketContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   StreamVideo,
   StreamVideoClient,
@@ -36,10 +37,42 @@ const CallAction = () => {
   console.log("USER", user);
   console.log("USER ID", user.id);
   const userID = { id: user.id.toString() };
-
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
+
+  useEffect(() => {
+    if (!socket) return;
+    console.log("SOCKET CHANGED");
+
+    const handleAmbulanceDispatched = (data) => {
+      console.log("Ambulance dispatched", data);
+      //update emergency information
+      AsyncStorage.setItem("branch", JSON.stringify(data.branch));
+      console.log("BRANCH", data.branch);
+      AsyncStorage.setItem("emergency", JSON.stringify(emergency));
+      console.log("EMERGENCY", emergency);
+      if (userCall && streamClient) {
+        userCall.leave();
+        streamClient.disconnectUser();
+      }
+
+      //keep retrying to leave the call until it succeeds
+      const retryLeaveCall = () => {
+        userCall.leave();
+        streamClient.disconnectUser();
+      };
+      retryLeaveCall();
+
+      navigation.navigate("EmergencyDispatched");
+    };
+
+    socket.on("ambulanceDispatched", handleAmbulanceDispatched);
+
+    return () => {
+      socket.off("ambulanceDispatched", handleAmbulanceDispatched);
+    };
+  }, [socket, userCall, streamClient]);
 
   useEffect(() => {
     if (!user || !token || !streamToken || streamClient) return;

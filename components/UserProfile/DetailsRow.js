@@ -1,55 +1,33 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+// DetailsRow.js
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+// import { Ionicons } from "@expo/vector-icons";
 
-const DetailsRow = ({ label, value, isEditing, handleInputChange, field }) => {
-  const [inputValue, setInputValue] = useState(value);
-
-  const validateInput = (text) => {
-    if (field === "weight" || field === "height") {
-      return /^\d+$/.test(text) ? text : inputValue;
-    }
-    return text;
-  };
-
+const DetailsRow = ({ label, value, field, onEditField }) => {
+  const isPlaceholder = value.toString().includes("Add your");
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      {isEditing ? (
-        field === "bloodType" ? (
-          <Picker
-            selectedValue={inputValue}
-            style={styles.input}
-            onValueChange={(itemValue) => handleInputChange(field, itemValue)}
-          >
-            <Picker.Item label="Select Blood Type" value="" />
-            <Picker.Item label="A+" value="A+" />
-            <Picker.Item label="A-" value="A-" />
-            <Picker.Item label="B+" value="B+" />
-            <Picker.Item label="B-" value="B-" />
-            <Picker.Item label="AB+" value="AB+" />
-            <Picker.Item label="AB-" value="AB-" />
-            <Picker.Item label="O+" value="O+" />
-            <Picker.Item label="O-" value="O-" />
-          </Picker>
-        ) : (
-          <TextInput
-            style={styles.input}
-            value={inputValue}
-            onChangeText={(text) => setInputValue(validateInput(text))}
-            onBlur={() => handleInputChange(field, inputValue)}
-          />
-        )
-      ) : (
-        <Text style={styles.value}>{value}</Text>
-      )}
+      <View style={styles.valueContainer}>
+        <Text style={[styles.value, isPlaceholder && styles.placeholder]}>
+          {value}
+        </Text>
+        <TouchableOpacity onPress={() => onEditField(field)}>
+          {/* <Ionicons
+            name={isPlaceholder ? "ios-add" : "ios-pencil"}
+            size={20}
+            color="#E30613"
+            style={styles.editIcon}
+          /> */}
+          <Text>Edit</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 15,
   },
@@ -63,13 +41,17 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "bold",
   },
-  input: {
-    fontSize: 16,
-    color: "#000",
-    fontWeight: "bold",
-    borderWidth: 1,
-    borderColor: "#000",
-    padding: 5,
+  placeholder: {
+    color: "#999",
+    fontWeight: "normal",
+  },
+  valueContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  editIcon: {
+    marginLeft: 10,
   },
 });
 

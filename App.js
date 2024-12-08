@@ -14,10 +14,15 @@ import Content from "./screens/VolunteeringContent";
 import { SocketProvider } from "./context/SocketContext";
 import { AuthProvider } from "./context/authContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-
+import EmergencyDispatched from "./screens/EmergencyDispatched";
+import { LogBox } from "react-native";
+import RequestsList from "./screens/RequestList";
+import VolunteerForm from "./screens/VolunteerForm";
+import Settings from "./screens/Settings";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  LogBox.ignoreAllLogs();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>
@@ -60,6 +65,24 @@ export default function App() {
                 options={{ title: "CallAction" }}
               />
               <Stack.Screen
+                name="EmergencyDispatched"
+                component={EmergencyDispatched}
+                options={{
+                  title: "Emergency Dispatched",
+                  headerShown: false,
+                  animation: "simple_push",
+                }}
+              />
+              <Stack.Screen
+                name="VolunteerForm"
+                component={VolunteerForm}
+                options={{
+                  title: "Volunteer Form",
+                  animation: "simple_push",
+                  presentation: "modal",
+                }}
+              />
+              <Stack.Screen
                 name="Profile"
                 component={Profile}
                 options={{
@@ -80,6 +103,23 @@ export default function App() {
                   title: "Content",
                   animation: "simple_push",
                   headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="RequestsList"
+                component={RequestsList}
+                options={{
+                  title: "Blood Requests",
+                  animation: "simple_push",
+                }}
+              />
+              <Stack.Screen
+                name="Settings"
+                component={Settings}
+                options={{
+                  title: "Settings",
+                  headerShown: false,
+                  animation: "simple_push",
                 }}
               />
             </Stack.Navigator>
