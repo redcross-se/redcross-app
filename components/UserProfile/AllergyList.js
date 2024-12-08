@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Picker } from "react-native";
 
 const AllergiesList = ({ allergies, isEditing, setUserDetails }) => {
   const [newAllergy, setNewAllergy] = useState("");
@@ -28,12 +22,19 @@ const AllergiesList = ({ allergies, isEditing, setUserDetails }) => {
       ))}
       {isEditing && (
         <>
-          <TextInput
+          <Picker
+            selectedValue={newAllergy}
             style={styles.input}
-            placeholder="Add Allergy"
-            value={newAllergy}
-            onChangeText={(text) => setNewAllergy(text)}
-          />
+            onValueChange={(itemValue) => setNewAllergy(itemValue)}
+          >
+            <Picker.Item label="Select Allergy" value="" />
+            <Picker.Item label="Peanuts" value="Peanuts" />
+            <Picker.Item label="Shellfish" value="Shellfish" />
+            <Picker.Item label="Milk" value="Milk" />
+            <Picker.Item label="Eggs" value="Eggs" />
+            <Picker.Item label="Soy" value="Soy" />
+            <Picker.Item label="Wheat" value="Wheat" />
+          </Picker>
           <TouchableOpacity style={styles.addButton} onPress={addAllergy}>
             <Text style={styles.addButtonText}>+ Add Allergy</Text>
           </TouchableOpacity>

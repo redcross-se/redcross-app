@@ -64,7 +64,7 @@ const Volunteer = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#E6E8EB",
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 20 : 0,
   },
   scrollContent: {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextInput,
 } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const ProfileInfo = ({
   name,
@@ -15,6 +16,17 @@ const ProfileInfo = ({
   setIsEditing,
   handleInputChange,
 }) => {
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || new Date(dateOfBirth);
+    setShowDatePicker(false);
+    handleInputChange("dob", currentDate.toISOString().split("T")[0]);
+    // Calculate age
+    const age = new Date().getFullYear() - currentDate.getFullYear();
+    handleInputChange("age", age.toString());
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -35,12 +47,19 @@ const ProfileInfo = ({
             value={name}
             onChangeText={(text) => handleInputChange("fullName", text)}
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Date of Birth"
-            value={dateOfBirth}
-            onChangeText={(text) => handleInputChange("dob", text)}
-          />
+          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+            <Text style={styles.input}>
+              {dateOfBirth || "Select Date of Birth"}
+            </Text>
+          </TouchableOpacity>
+          {showDatePicker && (
+            <DateTimePicker
+              value={new Date(dateOfBirth) || new Date()}
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
         </>
       ) : (
         <>

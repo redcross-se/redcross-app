@@ -1,25 +1,47 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
 const DetailsRow = ({ label, value, isEditing, handleInputChange, field }) => {
-  const [inputValue, setInputValue] = useState("");
-  let valueStyles = styles.value;
-  if (value.includes("Add")) {
-    valueStyles = {
-      color: "#AAA",
-    };
-  }
+  const [inputValue, setInputValue] = useState(value);
+
+  const validateInput = (text) => {
+    if (field === "weight" || field === "height") {
+      return /^\d+$/.test(text) ? text : inputValue;
+    }
+    return text;
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
       {isEditing ? (
-        <TextInput
-          style={styles.input}
-          value={inputValue}
-          onChangeText={(text) => setInputValue(text)}
-        />
+        field === "bloodType" ? (
+          <Picker
+            selectedValue={inputValue}
+            style={styles.input}
+            onValueChange={(itemValue) => handleInputChange(field, itemValue)}
+          >
+            <Picker.Item label="Select Blood Type" value="" />
+            <Picker.Item label="A+" value="A+" />
+            <Picker.Item label="A-" value="A-" />
+            <Picker.Item label="B+" value="B+" />
+            <Picker.Item label="B-" value="B-" />
+            <Picker.Item label="AB+" value="AB+" />
+            <Picker.Item label="AB-" value="AB-" />
+            <Picker.Item label="O+" value="O+" />
+            <Picker.Item label="O-" value="O-" />
+          </Picker>
+        ) : (
+          <TextInput
+            style={styles.input}
+            value={inputValue}
+            onChangeText={(text) => setInputValue(validateInput(text))}
+            onBlur={() => handleInputChange(field, inputValue)}
+          />
+        )
       ) : (
-        <Text style={valueStyles}>{value}</Text>
+        <Text style={styles.value}>{value}</Text>
       )}
     </View>
   );

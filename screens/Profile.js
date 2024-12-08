@@ -7,6 +7,8 @@ import {
   Text,
   Button,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import HeaderComponent from "../components/EmergencyCall/Header";
 import ProfileInfoComponent from "../components/UserProfile/ProfileInfo";
@@ -73,39 +75,45 @@ const Profile = ({ navigation }) => {
   ];
 
   return (
-    <ScrollView style={styles.container}>
-      <ProfileInfoComponent
-        name={userDetails.fullName}
-        dateOfBirth={userDetails.dob || "Add Date of Birth"}
-        isEditing={isEditing}
-        setIsEditing={setIsEditing}
-        handleInputChange={handleInputChange}
-      />
-      <DetailsGridComponent
-        details={details}
-        isEditing={isEditing}
-        handleInputChange={handleInputChange}
-      />
-      <AllergiesList
-        allergies={userDetails.allergies || []}
-        isEditing={isEditing}
-        setUserDetails={(updatedAllergies) =>
-          handleInputChange("allergies", updatedAllergies)
-        }
-      />
-      <EmergencyContacts
-        contacts={userDetails.emergencyContacts || []}
-        isEditing={isEditing}
-        setUserDetails={(updatedContacts) =>
-          handleInputChange("emergencyContacts", updatedContacts)
-        }
-      />
-      {isEditing ? (
-        <Button title="Save Profile" onPress={handleSaveProfile} />
-      ) : (
-        <Button title="Edit Profile" onPress={handleEditProfile} />
-      )}
-    </ScrollView>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 20}
+    >
+      <ScrollView style={styles.container}>
+        <ProfileInfoComponent
+          name={userDetails.fullName}
+          dateOfBirth={userDetails.dob || "Add Date of Birth"}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+          handleInputChange={handleInputChange}
+        />
+        <DetailsGridComponent
+          details={details}
+          isEditing={isEditing}
+          handleInputChange={handleInputChange}
+        />
+        <AllergiesList
+          allergies={userDetails.allergies || []}
+          isEditing={isEditing}
+          setUserDetails={(updatedAllergies) =>
+            handleInputChange("allergies", updatedAllergies)
+          }
+        />
+        <EmergencyContacts
+          contacts={userDetails.emergencyContacts || []}
+          isEditing={isEditing}
+          setUserDetails={(updatedContacts) =>
+            handleInputChange("emergencyContacts", updatedContacts)
+          }
+        />
+        {isEditing ? (
+          <Button title="Save Profile" onPress={handleSaveProfile} />
+        ) : (
+          <Button title="Edit Profile" onPress={handleEditProfile} />
+        )}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
